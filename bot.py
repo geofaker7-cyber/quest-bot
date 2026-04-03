@@ -9,12 +9,13 @@ location_history = []  # список (timestamp, lat, lon)
 subscribers = set()
 
 DELAY = 60  # задержка 3 минуты в секундах
-BROADCAST_INTERVAL = 180  # интервал рассылки 5 минут
+BROADCAST_INTERVAL = 60  # интервал рассылки 5 минут
 
 # команда /start для участников
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     subscribers.add(update.effective_chat.id)
-    await update.message.reply_text("Ты подписан на отслеживание!")
+    await update.message.reply_text("Привет! Единорог Амур из города Рума ждет, чтобы вы его нашли. Но как и все с мифическими существами
+     - это будет не просто: раз в минуту сюда будет приходить ссылка на место, где некоторое время назад находился наш Амур")
 
 # обработка геолокации от цели
 async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
