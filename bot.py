@@ -23,28 +23,39 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
     location_history.append((now, loc.latitude, loc.longitude))
     await update.message.reply_text("Локация получена!")
 
-# функция рассылки каждые N минут
-async def broadcast(context: ContextTypes.DEFAULT_TYPE):
+last_sent_time = 0  # глобально
+
+async def broadcast(context):
+    global last_sent_time
+
     now = time.time()
-    target_time = now - DELAY  # берём координату с задержкой N минуты
+    target_time = now - DELAY
 
     chosen_location = None
-    for t, lat, lon in reversed(location_history):
-        if t <= target_time:
+    chosen_time = None
+
+    # ищем точку:
+    # 1. старше 3 минут
+    # 2. НОВЕЕ, чем уже отправленная
+    for t, lat, lon in location_history:
+        if last_sent_time < t <= target_time:
             chosen_location = (lat, lon)
-            break
+            chosen_time = t
 
     if chosen_location:
         lat, lon = chosen_location
+        last_sent_time = chosen_time
+
         link = f"https://yandex.ru/maps/?ll={lon}%2C{lat}&z=17&pt={lon},{lat},pm2rdm"
+
         for chat_id in subscribers:
             try:
                 await context.bot.send_message(
                     chat_id,
-                    f"📍 Место где недавно проскакал Амур:\n{link}"
-                )
+                         f"📍 Место где недавно проскакал Амур:\n{link}"                )
             except:
                 pass
+
 
 
 target_ids = {797183969, 987654321}  # Telegram ID Целей
