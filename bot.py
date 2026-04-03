@@ -8,8 +8,8 @@ TOKEN = os.getenv("TOKEN")  # токен бота из Variables Railway
 location_history = []  # список (timestamp, lat, lon)
 subscribers = set()
 
-DELAY = 180  # задержка 3 минуты в секундах
-BROADCAST_INTERVAL = 300  # интервал рассылки 5 минут
+DELAY = 60  # задержка 3 минуты в секундах
+BROADCAST_INTERVAL = 180  # интервал рассылки 5 минут
 
 # команда /start для участников
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
