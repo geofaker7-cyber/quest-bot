@@ -46,6 +46,28 @@ async def broadcast(context: ContextTypes.DEFAULT_TYPE):
             except:
                 pass
 
+
+target_id = None  # глобальная переменная для цели
+
+async def start(update, context):
+    global target_id
+
+
+# список ID целей (можно добавить несколько)
+target_ids = {123456789, 987654321}  # сюда вставь реальные Telegram ID Целей
+
+async def handle_location(update, context):
+    # сохраняем координаты только если отправитель в target_ids
+    if update.effective_chat.id not in target_ids:
+        return  # игнорируем остальных
+
+    loc = update.message.location
+    now = time.time()
+    location_history.append((now, loc.latitude, loc.longitude))
+    await update.message.reply_text("Локация получена!")
+
+
+
 # основной запуск бота
 def main():
     app = ApplicationBuilder().token(TOKEN).build()
