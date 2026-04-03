@@ -8,8 +8,8 @@ TOKEN = os.getenv("TOKEN")  # токен бота из Variables Railway
 location_history = []  # список (timestamp, lat, lon)
 subscribers = set()
 
-DELAY = 30  # задержка 3 минуты в секундах
-BROADCAST_INTERVAL = 75  # интервал рассылки 5 минут
+DELAY = 30  # задержка 30 в секундах
+BROADCAST_INTERVAL = 75  # интервал рассылки 75 секунд
 
 # команда /start для участников
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -36,7 +36,7 @@ async def broadcast(context: ContextTypes.DEFAULT_TYPE):
 
     if chosen_location:
         lat, lon = chosen_location
-        link = f"https://maps.google.com/?q={lat},{lon}"
+        link = f"https://yandex.ru/maps/?ll={lon}%2C{lat}&z=17&pt={lon},{lat},pm2rdm"
         for chat_id in subscribers:
             try:
                 await context.bot.send_message(
