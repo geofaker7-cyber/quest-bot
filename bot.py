@@ -1,34 +1,34 @@
-
-import asyncio
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 import time
 import os
-from telegram import Update
-from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes, CommandHandler
 
-TOKEN = os.getenv("TOKEN")
+TOKEN = os.getenv("TOKEN")  # токен бота из Variables Railway
 
-location_history = []  # (timestamp, lat, lon)
+location_history = []  # список (timestamp, lat, lon)
 subscribers = set()
 
-DELAY = 180  # 3 минуты
+DELAY = 180  # задержка 3 минуты в секундах
+BROADCAST_INTERVAL = 300  # интервал рассылки 5 минут
 
+# команда /start для участников
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     subscribers.add(update.effective_chat.id)
     await update.message.reply_text("Ты подписан на отслеживание!")
 
+# обработка геолокации от цели
 async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
     loc = update.message.location
     now = time.time()
-
     location_history.append((now, loc.latitude, loc.longitude))
     await update.message.reply_text("Локация получена!")
 
+# функция рассылки каждые 5 минут
 async def broadcast(context: ContextTypes.DEFAULT_TYPE):
     now = time.time()
-    target_time = now - DELAY
+    target_time = now - DELAY  # берём координату с задержкой 3 минуты
 
     chosen_location = None
-
     for t, lat, lon in reversed(location_history):
         if t <= target_time:
             chosen_location = (lat, lon)
@@ -37,7 +37,6 @@ async def broadcast(context: ContextTypes.DEFAULT_TYPE):
     if chosen_location:
         lat, lon = chosen_location
         link = f"https://maps.google.com/?q={lat},{lon}"
-
         for chat_id in subscribers:
             try:
                 await context.bot.send_message(
@@ -47,18 +46,18 @@ async def broadcast(context: ContextTypes.DEFAULT_TYPE):
             except:
                 pass
 
-async def main():
+# основной запуск бота
+def main():
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.LOCATION, handle_location))
 
-    app.job_queue.run_repeating(broadcast, interval=300, first=10)
+    # запускаем JobQueue для broadcast
+    app.job_queue.run_repeating(broadcast, interval=BROADCAST_INTERVAL, first=10)
 
     print("Бот запущен")
-    await app.run_polling()
-    
+    app.run_polling()
+
 if __name__ == "__main__":
-    # asyncio.run(main())  # старый вариант
-    import asyncio
-    asyncio.get_event_loop().run_until_complete(main())
+    main()
