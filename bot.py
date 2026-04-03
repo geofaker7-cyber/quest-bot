@@ -23,10 +23,10 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
     location_history.append((now, loc.latitude, loc.longitude))
     await update.message.reply_text("Локация получена!")
 
-# функция рассылки каждые 5 минут
+# функция рассылки каждые N минут
 async def broadcast(context: ContextTypes.DEFAULT_TYPE):
     now = time.time()
-    target_time = now - DELAY  # берём координату с задержкой 3 минуты
+    target_time = now - DELAY  # берём координату с задержкой N минуты
 
     chosen_location = None
     for t, lat, lon in reversed(location_history):
@@ -47,20 +47,11 @@ async def broadcast(context: ContextTypes.DEFAULT_TYPE):
                 pass
 
 
-target_id = None  # глобальная переменная для цели
-
-async def start(update, context):
-    global target_id
-
-
-# список ID целей (можно добавить несколько)
-target_ids = {797183969, 987654321}  # сюда вставь реальные Telegram ID Целей
+target_ids = {797183969, 987654321}  # Telegram ID Целей
 
 async def handle_location(update, context):
-    # сохраняем координаты только если отправитель в target_ids
     if update.effective_chat.id not in target_ids:
-        return  # игнорируем остальных
-
+        return  # игнорируем координаты остальных
     loc = update.message.location
     now = time.time()
     location_history.append((now, loc.latitude, loc.longitude))
