@@ -55,7 +55,7 @@ async def handle_location(update, context):
     loc = update.message.location
     now = time.time()
     location_history.append((now, loc.latitude, loc.longitude))
-    await update.message.reply_text("Локация получена!")
+    await update.message.reply_text("Локация получена! Теперь она распространяется среди участников игры")
 
 
 
