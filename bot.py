@@ -8,8 +8,8 @@ TOKEN = os.getenv("TOKEN")  # токен бота из Variables Railway
 location_history = []  # список (timestamp, lat, lon)
 subscribers = set()
 
-DELAY = 60  # задержка 3 минуты в секундах
-BROADCAST_INTERVAL = 65  # интервал рассылки 5 минут
+DELAY = 30  # задержка 3 минуты в секундах
+BROADCAST_INTERVAL = 75  # интервал рассылки 5 минут
 
 # команда /start для участников
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -41,7 +41,7 @@ async def broadcast(context: ContextTypes.DEFAULT_TYPE):
             try:
                 await context.bot.send_message(
                     chat_id,
-                    f"📍 Место где недавно был Амур:\n{link}"
+                    f"📍 Место где недавно проскакал Амур:\n{link}"
                 )
             except:
                 pass
