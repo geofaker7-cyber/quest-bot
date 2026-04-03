@@ -9,7 +9,7 @@ location_history = []  # список (timestamp, lat, lon)
 subscribers = set()
 
 DELAY = 30  # задержка 30 в секундах
-BROADCAST_INTERVAL = 75  # интервал рассылки 75 секунд
+BROADCAST_INTERVAL = 25  # интервал рассылки 75 секунд
 
 # команда /start для участников
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
