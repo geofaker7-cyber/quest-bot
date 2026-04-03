@@ -54,7 +54,7 @@ async def start(update, context):
 
 
 # список ID целей (можно добавить несколько)
-target_ids = {123456789, 987654321}  # сюда вставь реальные Telegram ID Целей
+target_ids = {797183969, 987654321}  # сюда вставь реальные Telegram ID Целей
 
 async def handle_location(update, context):
     # сохраняем координаты только если отправитель в target_ids
