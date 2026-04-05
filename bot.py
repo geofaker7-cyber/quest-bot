@@ -8,7 +8,7 @@ TOKEN = os.getenv("TOKEN")  # токен бота из Variables Railway
 location_history = []  # список (timestamp, lat, lon)
 subscribers = set()
 
-DELAY = 30  # задержка 30 в секундах
+DELAY = 20  # задержка 30 в секундах
 BROADCAST_INTERVAL = 25  # интервал рассылки 75 секунд
 
 # команда /start для участников
@@ -61,7 +61,7 @@ async def handle_location(update, context):
     location_history.append((now, loc.latitude, loc.longitude))
     await update.message.reply_text("Локация получена! Теперь она распространяется среди участников игры")
 
-
+print(f"Всего точек: {len(location_history)}")
 
 # основной запуск бота
 def main():
