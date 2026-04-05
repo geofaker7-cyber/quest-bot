@@ -16,13 +16,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     subscribers.add(update.effective_chat.id)
     await update.message.reply_text("Привет! Единорог Амур из города Рума ждет, чтобы вы его нашли. Но как и все с мифическими существами - это будет не просто: раз в минуту сюда будет приходить ссылка на место, где некоторое время назад находился наш Амур")
 
-# обработка геолокации от Единорога
-async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    loc = update.message.location
-    now = time.time()
-    location_history.append((now, loc.latitude, loc.longitude))
-    await update.message.reply_text("Локация получена!")
-
 last_sent_time = 0  # глобально
 
 async def broadcast(context):
